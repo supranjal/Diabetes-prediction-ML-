@@ -2,11 +2,6 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Import custom preprocessing classes
-# Required for loading the saved pipeline
-import src.preprocessing
-
-
 # -----------------------------------
 # Load trained pipeline
 # -----------------------------------
@@ -42,60 +37,54 @@ st.write(
 # Input fields
 # -----------------------------------
 
-pregnancies = st.number_input(
-    "Pregnancies",
-    min_value=0,
-    max_value=20,
-    value=0
-)
-
-glucose = st.number_input(
-    "Glucose",
-    min_value=0,
-    max_value=300,
-    value=120
-)
-
-blood_pressure = st.number_input(
-    "Blood Pressure",
-    min_value=0,
-    max_value=200,
-    value=70
-)
-
-skin_thickness = st.number_input(
-    "Skin Thickness",
-    min_value=0,
-    max_value=100,
-    value=20
-)
-
-insulin = st.number_input(
-    "Insulin",
-    min_value=0,
-    max_value=900,
-    value=80
-)
-
-bmi = st.number_input(
-    "BMI",
-    min_value=0.0,
-    max_value=70.0,
-    value=25.0
-)
-
-diabetes_pedigree = st.number_input(
-    "Diabetes Pedigree Function",
-    min_value=0.0,
-    max_value=3.0,
-    value=0.5
+gender = st.selectbox(
+    "Gender",
+    options=["Female", "Male", "Other"]
 )
 
 age = st.number_input(
     "Age",
-    min_value=1,
-    max_value=120,
-    value=30
+    min_value=0.0,
+    max_value=80.0,
+    value=40.0
+)
+
+hypertension = st.selectbox(
+    "Hypertension",
+    options=[0, 1],
+    format_func=lambda value: "Yes" if value else "No"
+)
+
+heart_disease = st.selectbox(
+    "Heart disease",
+    options=[0, 1],
+    format_func=lambda value: "Yes" if value else "No"
+)
+
+smoking_history = st.selectbox(
+    "Smoking history",
+    options=["No Info", "current", "ever", "former", "never", "not current"]
+)
+
+bmi = st.number_input(
+    "BMI",
+    min_value=10.0,
+    max_value=95.69,
+    value=27.32
+)
+
+hb_a1c_level = st.number_input(
+    "HbA1c level",
+    min_value=3.5,
+    max_value=9.0,
+    value=5.8
+)
+
+blood_glucose_level = st.number_input(
+    "Blood glucose level",
+    min_value=80,
+    max_value=300,
+    value=140
 )
 
 
@@ -108,14 +97,14 @@ if st.button("Predict"):
     # Create DataFrame with the same
     # feature names used during training
     input_data = pd.DataFrame({
-        "Pregnancies": [pregnancies],
-        "Glucose": [glucose],
-        "BloodPressure": [blood_pressure],
-        "SkinThickness": [skin_thickness],
-        "Insulin": [insulin],
-        "BMI": [bmi],
-        "DiabetesPedigreeFunction": [diabetes_pedigree],
-        "Age": [age]
+        "gender": [gender],
+        "age": [age],
+        "hypertension": [hypertension],
+        "heart_disease": [heart_disease],
+        "smoking_history": [smoking_history],
+        "bmi": [bmi],
+        "HbA1c_level": [hb_a1c_level],
+        "blood_glucose_level": [blood_glucose_level]
     })
 
     # Make prediction using the saved pipeline
